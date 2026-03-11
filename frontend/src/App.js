@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, NavLink, useLocation } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, NavLink, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./pages/Dashboard";
 import Employees from "./pages/Employees";
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
 
 function Sidebar() {
   const location = useLocation();
+
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
@@ -23,6 +24,7 @@ function Sidebar() {
           <div className="brand-sub">Admin Portal</div>
         </div>
       </div>
+
       <nav className="sidebar-nav">
         {NAV_ITEMS.map((item) => (
           <NavLink
@@ -36,6 +38,7 @@ function Sidebar() {
           </NavLink>
         ))}
       </nav>
+
       <div className="sidebar-footer">
         <div className="admin-badge">
           <span className="admin-dot" />
@@ -48,17 +51,35 @@ function Sidebar() {
 
 function Layout({ children }) {
   const location = useLocation();
-  const titles = { "/": "Dashboard", "/employees": "Employee Management", "/attendance": "Attendance Tracker" };
+
+  const titles = {
+    "/": "Dashboard",
+    "/employees": "Employee Management",
+    "/attendance": "Attendance Tracker",
+  };
+
   return (
     <div className="layout">
       <Sidebar />
+
       <main className="main-content">
         <header className="topbar">
-          <h1 className="page-title">{titles[location.pathname] || "HRMS Lite"}</h1>
+          <h1 className="page-title">
+            {titles[location.pathname] || "HRMS Lite"}
+          </h1>
+
           <div className="topbar-right">
-            <span className="today-badge">{new Date().toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}</span>
+            <span className="today-badge">
+              {new Date().toLocaleDateString("en-IN", {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
           </div>
         </header>
+
         <div className="page-body">{children}</div>
       </main>
     </div>
@@ -67,13 +88,48 @@ function Layout({ children }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Toaster position="top-right" toastOptions={{ style: { fontFamily: "'DM Sans', sans-serif", borderRadius: "10px", background: "#1a1a2e", color: "#e2e8f0", border: "1px solid rgba(99,102,241,0.3)" } }} />
+    <Router>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            fontFamily: "'DM Sans', sans-serif",
+            borderRadius: "10px",
+            background: "#1a1a2e",
+            color: "#e2e8f0",
+            border: "1px solid rgba(99,102,241,0.3)",
+          },
+        }}
+      />
+
       <Routes>
-        <Route path="/" element={<Layout><Dashboard /></Layout>} />
-        <Route path="/employees" element={<Layout><Employees /></Layout>} />
-        <Route path="/attendance" element={<Layout><Attendance /></Layout>} />
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <Dashboard />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/employees"
+          element={
+            <Layout>
+              <Employees />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/attendance"
+          element={
+            <Layout>
+              <Attendance />
+            </Layout>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
